@@ -1,9 +1,9 @@
 [
 {
-  "modid": "some mod",
-  "name": "planetsssss",
-  "description": "this doesn't work",
-  "version": "1.0 wew",
+  "modid": "Spaceflux",
+  "name": "Spaceflux",
+  "description": "A procedural planet generation add-on for Galacticraft.",
+  "version": "1.0",
   "mcversion": "1.7.10",
   "authorList": ["Anuke"],
   "credits": "Anuke",

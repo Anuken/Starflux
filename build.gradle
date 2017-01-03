@@ -18,8 +18,8 @@ buildscript {
 apply plugin: 'forge'
 
 version = "1.0"
-group= "io.anuke.someplanets" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "someplanets"
+group= "io.anuke.starflux" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "starflux"
 
 minecraft {
     version = "1.7.10-10.13.4.1558-1.7.10"
