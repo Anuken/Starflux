@@ -13,11 +13,11 @@ import micdoodle8.mods.galacticraft.api.galaxies.Moon;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import net.minecraft.util.ResourceLocation;
 
-@Mod(modid = SomePlanets.MODID, version = SomePlanets.VERSION, dependencies = "required-after:GalacticraftCore")
-public class SomePlanets{
-    public static final String MODID = "SomePlanets";
+@Mod(modid = Starflux.MODID, version = Starflux.VERSION, dependencies = "required-after:GalacticraftCore")
+public class Starflux{
+    public static final String MODID = "Starflux";
     public static final String VERSION = "1.0";
-    public static final String ASSETPREFIX = "someplanets";
+    public static final String ASSETPREFIX = "starflux";
     
     public static Moon moon;
     

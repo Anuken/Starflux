@@ -119,7 +119,7 @@ public class PlanetData {
 		if (data.temperature > 0.8f) {
 
 			// try to use a molten metal liquid, if possible
-			if (Loader.isModLoaded("TinkersConstruct")) {
+			if (Loader.isModLoaded("tconstruct")) {
 
 			} else if (Loader.isModLoaded("ThermalFoundation")) {
 
@@ -136,10 +136,10 @@ public class PlanetData {
 			if (data.temperature > 0.8f) {
 
 				// try to use a molten metal liquid, if possible
-				if (Loader.isModLoaded("TinkersConstruct")) {
-
+				if (Loader.isModLoaded("tconstruct")) {
+					
 				} else if (Loader.isModLoaded("ThermalFoundation")) {
-
+					
 				} else { // no mods loaded, just use lava for the liquid
 					surfaceLiquid = Blocks.lava;
 				}
@@ -154,6 +154,14 @@ public class PlanetData {
 				}
 				//TODO
 			}
+		}
+		
+		if (Loader.isModLoaded("ThermalFoundation")) {
+			System.out.println("Thermal Foundation loaded");
+		}
+		
+		if (Loader.isModLoaded("tconstruct")) {
+			System.out.println("TC loaded");
 		}
 
 		data.coreLiquid = coreLiquid;
