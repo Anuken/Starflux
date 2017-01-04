@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cofh.thermalfoundation.block.TFBlocks;
 import io.anuke.starflux.noise.Noise;
 import io.anuke.starflux.noise.RidgedPerlin;
 import io.anuke.starflux.planets.PlanetData;
@@ -16,7 +15,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
-import tconstruct.smeltery.TinkerSmeltery;
 
 public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	float scale = 0.3f;
@@ -27,7 +25,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	RidgedPerlin rid = new RidgedPerlin(2, 1, 0.4f);
 	RidgedPerlin cave = new RidgedPerlin(3, 2, 0.4f);
 	RidgedPerlin cave2 = new RidgedPerlin(4, 1, 0.4f);
-	BiomeDecoratorSpace decorator = new ProceduralBiomeDecorator();
+	BiomeDecoratorSpace decorator;
 	List<MapGenBaseMeta> generators = new ArrayList<MapGenBaseMeta>();
 	SpawnListEntry[] creatures = {};
 	SpawnListEntry[] monsters = {};
@@ -36,13 +34,13 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	private Block[] writeids = new Block[32768 * 2];
 	Random rand = new Random();
 	private int chunkx, chunkz;
-	boolean snow = false;
 	public PlanetData data;
 
 	public ProceduralChunkProvider(PlanetData data, World world, long seed, boolean mapFeaturesEnabled) {
 		super(world, seed, mapFeaturesEnabled);
 		rand.setSeed(seed);
 		this.data = data;
+		decorator = new ProceduralBiomeDecorator(data);
 	}
 
 	@Override
@@ -94,19 +92,19 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 						}
 
 					if (y >= height)
-						block = TFBlocks.blockFluidRedstone;
+						block = data.surfaceLiquid;
 					
-					if (cave.getValue(wx, y, wz, 0.009f) / 2.3f + cave2.getValue(wx, y, wz, 0.01f) / 3.3f
+					if (data.hasCaves && cave.getValue(wx, y, wz, 0.009f) / 2.3f + cave2.getValue(wx, y, wz, 0.01f) / 3.3f
 							+ Noise.normalNoise(wx, y, wz, 50f, 0.7f) + Noise.normalNoise(wx, y, wz, 25f, 0.25f)
 							+ Noise.normalNoise(wx, y, wz, 11f, 0.25f)
-							+ Noise.normalNoise(wx, y, wz, 8f, 0.15f) >= 0.78f && block != Blocks.water)
+							+ Noise.normalNoise(wx, y, wz, 8f, 0.15f) >= 0.78f && block != data.surfaceLiquid)
 						block = Blocks.air;
 
 					if (y < lavacaveheight)
 						block = Blocks.air;
 
 					if (y < lava)
-						block = TinkerSmeltery.moltenArdite;
+						block = data.coreLiquid;
 
 					if (y <= lavafloorheight)
 						block = Blocks.stone;
@@ -146,7 +144,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	}
 
 	void genTopBlock(int x, int y, int z) {
-		if (!snow) {
+		if (!data.hasSnow) {
 			if (getBlock(x, y, z) == Blocks.grass && rand.nextFloat() < 0.2f)
 				setBlock(x, y + 1, z, Blocks.tallgrass, 1);
 		} else if(getBlock(x, y, z) != null && getBlock(x, y, z).getMaterial().isSolid()){

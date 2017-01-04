@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cofh.thermalfoundation.block.TFBlocks;
 import cpw.mods.fml.common.Loader;
 import io.anuke.starflux.objects.ObjectGenerator;
 import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
@@ -33,6 +34,7 @@ public class PlanetData {
 	public boolean hasSnow; // DONE
 	public BlockMetaPair[] heightBlocks; // X
 	public BlockMetaPair[] temperatureBlocks; // X
+	public BlockMetaPair stoneBlock;
 	public ArrayList<IAtmosphericGas> gases; // DONE
 	public ArrayList<MineralDeposit> minerals; // DONE
 	public Vec3 skyColor; // DONE
@@ -57,7 +59,7 @@ public class PlanetData {
 	}
 
 	static enum Mineral {
-		iron, lead, diamond, copper, tin, aluminum, coal, clay, glowstone, redstone;
+		iron, lead, diamond, copper, tin, aluminum, gold, redstone, emerald, coal, clay, glowstone;
 
 		public String capitalized() {
 			return name().substring(0, 1).toUpperCase() + name().substring(1);
@@ -99,6 +101,8 @@ public class PlanetData {
 		data.pressure = range(0f, 1f);
 		data.worldScale = range(0.2f, 0.9f);
 		data.gravity = 0.04f + range(-0.03f, 0.03f);
+		
+		data.stoneBlock = new BlockMetaPair(Blocks.stone, (byte)0);
 
 		data.gases = new ArrayList<IAtmosphericGas>();
 
@@ -149,25 +153,38 @@ public class PlanetData {
 		if (data.temperature > 0.8f) {
 
 			// try to use a molten metal liquid, if possible
-			if (Loader.isModLoaded("TConstruct")) {
-				// surfaceLiquid = TinkerSmeltery.moltenAlubrass;
+			if (Loader.isModLoaded("TConstruct") && range(2) == 0) {
 				MineralDeposit max = null;
 				for (MineralDeposit mineral : data.minerals) {
 					if (max == null || mineral.amount > max.amount) {
 						max = mineral;
 					}
 				}
+				//use the block if its amount is > 0.8
 				if (max != null && max.amount > 0.8f) {
 					try {
-						TinkerSmeltery.class.getField("molten" + max.mineral.capitalized() + "Fluid");
-					} catch (Exception e) {
-
-					}
+						Field field = TinkerSmeltery.class.getField("molten" + max.mineral.capitalized() + "Fluid");
+						surfaceLiquid = (Block)field.get(null);
+					} catch (Exception e) {}
+				}else if(data.pressure > 0.8f){
+					surfaceLiquid = TinkerSmeltery.moltenGlass;
+				}else{
+					surfaceLiquid = Blocks.lava;
 				}
 			} else if (Loader.isModLoaded("ThermalFoundation")) {
-
-			} else { // no mods loaded, just use lava for the liquid
+				if(data.pressure > 0.9f){
+					surfaceLiquid = TFBlocks.blockFluidCoal;
+				}else if(range(2) == 0){
+					surfaceLiquid = (new Block[]{TFBlocks.blockFluidEnder, TFBlocks.blockFluidRedstone, TFBlocks.blockFluidAerotheum})[range(3)];
+				}else{
+					surfaceLiquid = Blocks.lava;
+				}
+			} else { // no mods loaded/usable, just use lava for the liquid
 				surfaceLiquid = Blocks.lava;
+			}
+		}else if(data.temperature <  0.2f){ //low temperature
+			if(Loader.isModLoaded("ThermalFoundation")){
+				
 			}
 		}
 
@@ -176,6 +193,9 @@ public class PlanetData {
 		Block coreLiquid = Blocks.air;
 
 		if (data.coreType == CoreType.molten) {
+			//TODO remove this
+			data.coreBlock = Blocks.netherrack;
+			data.coreLiquid = TFBlocks.blockFluidPyrotheum;
 			if (data.temperature > 0.8f) {
 
 				// try to use a molten metal liquid, if possible
@@ -190,13 +210,17 @@ public class PlanetData {
 			// TODO
 		} else if (data.coreType == CoreType.frozen) {
 			data.coreBlock = Blocks.packed_ice;
+			coreLiquid = TFBlocks.blockFluidCryotheum;
 
 			if (Loader.isModLoaded("ThermalFoundation")) {
 				if (data.temperature < 0.2) {
-					// coreLiquid = TFBlocks.blockFluidCryotheum;
+					coreLiquid = TFBlocks.blockFluidCryotheum;
 				}
 				// TODO
 			}
+		}else if(data.coreType == CoreType.water){
+			data.coreBlock = data.stoneBlock.getBlock();
+			coreLiquid = Blocks.water;
 		}
 
 		data.coreLiquid = coreLiquid;
