@@ -74,7 +74,7 @@ public class PlanetData {
 	
 	private PlanetData(){}
 
-	public static PlanetData createPlanetData() {
+	public static PlanetData createPlanetData(int id) {
 		PlanetData data = new PlanetData();
 
 		data.name = "";
@@ -83,7 +83,7 @@ public class PlanetData {
 		for (int i = 0; i < length; i++)
 			data.name += nameChunks[range(nameChunks.length)];
 
-		data.id = 9;
+		data.id = id;
 
 		data.temperature = range(0f, 1f);
 		data.hillyness = range(0f, 1f);

@@ -2,6 +2,7 @@ package io.anuke.starflux.generation;
 
 import java.util.Random;
 
+import io.anuke.starflux.Starflux;
 import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.util.DefaultCloudRenderer;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
@@ -10,7 +11,6 @@ import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.IExitHeight;
 import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 import micdoodle8.mods.galacticraft.api.world.ITeleportType;
-import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Vec3;
@@ -94,6 +94,11 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
     public Vector3 getSkyColor() {
         return new Vector3(0.7f, 0.3f, 0.2f);
     }
+    
+    @Override
+    public IChunkProvider createChunkGenerator(){
+    	return new ProceduralChunkProvider(data, this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled());
+    }
  
      //Created Later
     @Override
@@ -147,7 +152,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
 
 	@Override
 	public CelestialBody getCelestialBody() {
-		return GalacticraftCore.planetOverworld;
+		return Starflux.planet;
 	}
 
 	@Override

@@ -39,9 +39,10 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	boolean snow = false;
 	public PlanetData data;
 
-	public ProceduralChunkProvider(World world, long seed, boolean mapFeaturesEnabled) {
+	public ProceduralChunkProvider(PlanetData data, World world, long seed, boolean mapFeaturesEnabled) {
 		super(world, seed, mapFeaturesEnabled);
 		rand.setSeed(seed);
+		this.data = data;
 	}
 
 	@Override

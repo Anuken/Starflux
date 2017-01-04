@@ -1,14 +1,17 @@
 package io.anuke.starflux;
 
+import java.util.HashMap;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import io.anuke.starflux.generation.ProceduralMoon;
 import io.anuke.starflux.generation.ProceduralWorldProvider;
+import io.anuke.starflux.planets.PlanetData;
+import io.anuke.starflux.planets.ProceduralPlanet;
 import micdoodle8.mods.galacticraft.api.GalacticraftRegistry;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.galaxies.GalaxyRegistry;
-import micdoodle8.mods.galacticraft.api.galaxies.Moon;
+import micdoodle8.mods.galacticraft.api.galaxies.Planet;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,16 +20,28 @@ public class Starflux{
     public static final String MODID = "Starflux";
     public static final String VERSION = "1.0";
     public static final String ASSETPREFIX = "starflux";
+    private static int lastID = 10;
     
-    public static Moon moon;
+    //public static Planet planet;
+    public static HashMap<Integer, Planet> planets = new HashMap<Integer, Planet>();
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	moon = (Moon) new ProceduralMoon("Unkown Planet").setParentPlanet(GalacticraftCore.planetOverworld).setRelativeSize(0.0017F).setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(8F, 8F));
-        moon.setRelativeOrbitTime(40F).setTierRequired(1).setBodyIcon(new ResourceLocation(ASSETPREFIX, "textures/gui/celestialbodies/amoon.png"));
-        moon.setDimensionInfo(3, ProceduralWorldProvider.class);
+    	createNewPlanet();
+    	createNewPlanet();
+    	createNewPlanet();
+    }
+    
+    public void createNewPlanet(){
+    	int id = lastID ++;
+    	
+    	PlanetData data = PlanetData.createPlanetData(id);
+    	
+    	Planet planet = (Planet) new ProceduralPlanet(data.name).setParentSolarSystem(GalacticraftCore.solarSystemSol).setRelativeSize(1F).setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(5F+planets.size()/2f, 5F+planets.size()/2f));
+        planet.setRelativeOrbitTime(40F).setTierRequired(1).setBodyIcon(new ResourceLocation(ASSETPREFIX, "textures/gui/celestialbodies/amoon.png"));
+        planet.setDimensionInfo(id, ProceduralWorldProvider.class);
        
-        GalaxyRegistry.registerMoon(moon);
+        GalaxyRegistry.registerPlanet(planet);
         
         GalacticraftRegistry.registerTeleportType(ProceduralWorldProvider.class, new ProceduralWorldProvider());
     }
