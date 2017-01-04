@@ -17,5 +17,4 @@ public class ProceduralPlanet extends Planet {
 	public String getLocalizedName() {
 		return defName;
 	}
-
 }
