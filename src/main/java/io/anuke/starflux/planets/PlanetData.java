@@ -47,6 +47,8 @@ public class PlanetData {
 	public BlockMetaPair surfaceLiquidSolid; // block used in lakes of the surface. In vanilla, this is sand or clay. [X]
 	public CoreType coreType; // DONE
 
+ public static Block[][] coreTemperatureBlocks;
+
 	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "rn", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "nk", "ji", "pod",
 			"ch", "mre", "ite", "rs" };
 
