@@ -82,6 +82,8 @@ public class PlanetData {
 		int length = range(2, 5);
 		for (int i = 0; i < length; i++)
 			data.name += nameChunks[range(nameChunks.length)];
+		
+		data.name = data.name.substring(0, 1).toUpperCase() + data.name.substring(1);
 
 		data.id = id;
 

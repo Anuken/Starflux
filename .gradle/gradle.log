@@ -10,24 +10,24 @@
 :apiClasses UP-TO-DATE
 :sourceMainJava
 :compileJavawarning: [options] bootstrap class path not set in conjunction with -source 1.6
-C:\Users\Anuke\workspace\Starflux\build\sources\java\io\anuke\starflux\generation\ProceduralWorldProvider.java:150: error: cannot find symbol
-		return Starflux.planet;
-		               ^
-  symbol:   variable planet
-  location: class Starflux
-1 error
 1 warning
- FAILED
 
-FAILURE: Build failed with an exception.
+:processResources UP-TO-DATE
+:classes
+:jar
+:compileTestJava UP-TO-DATE
+:processTestResources UP-TO-DATE
+:testClasses UP-TO-DATE
+:test UP-TO-DATE
+:extractMcpData UP-TO-DATE
+:getVersionJson
+:extractUserDev UP-TO-DATE
+:genSrgs SKIPPED
+:reobf
+:assemble
+:check UP-TO-DATE
+:build
 
-* What went wrong:
-Execution failed for task ':compileJava'.
-> Compilation failed; see the compiler error output for details.
+BUILD SUCCESSFUL
 
-* Try:
-Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
-
-BUILD FAILED
-
-Total time: 14.392 secs
+Total time: 12.906 secs

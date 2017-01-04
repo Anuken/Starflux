@@ -3,7 +3,7 @@ package io.anuke.starflux.generation;
 import java.util.Random;
 
 import io.anuke.starflux.Starflux;
-import io.anuke.starflux.planets.PlanetData;
+import io.anuke.starflux.planets.ProceduralPlanet;
 import io.anuke.starflux.util.DefaultCloudRenderer;
 import micdoodle8.mods.galacticraft.api.galaxies.CelestialBody;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.WorldProviderSpace;
@@ -22,7 +22,15 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
 
 public class ProceduralWorldProvider extends WorldProviderSpace implements IExitHeight, ISolarLevel, ITeleportType{
-	public PlanetData data;
+	public ProceduralPlanet planet;
+	
+	//this gets called right after creation.
+	//use it to load the planet data
+	@Override
+    public void setDimension(int dim){
+        this.dimensionId = dim;
+        this.planet = Starflux.getPlanetByID(dim);
+    }
 	
     @Override
     public boolean canSpaceshipTierPass(int tier) {
@@ -97,7 +105,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
     
     @Override
     public IChunkProvider createChunkGenerator(){
-    	return new ProceduralChunkProvider(data, this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled());
+    	return new ProceduralChunkProvider(planet.data, this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled());
     }
  
      //Created Later
@@ -152,7 +160,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
 
 	@Override
 	public CelestialBody getCelestialBody() {
-		return Starflux.planet;
+		return planet;
 	}
 
 	@Override
