@@ -32,8 +32,8 @@ public class PlanetData {
 	public float caveSize; // DONE
 	public boolean hasCaves; // DONE
 	public boolean hasSnow; // DONE
-	public BlockMetaPair[] heightBlocks; // X
-	public BlockMetaPair[] temperatureBlocks; // X
+	public BlockMetaPair[][] topBlocks; // X
+ public BlockMetaPair stalagctiteBlock;
 	public BlockMetaPair stoneBlock;
 	public ArrayList<IAtmosphericGas> gases; // DONE
 	public ArrayList<MineralDeposit> minerals; // DONE
