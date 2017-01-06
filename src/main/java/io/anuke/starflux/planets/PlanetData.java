@@ -47,7 +47,8 @@ public class PlanetData {
 	public BlockMetaPair surfaceLiquidSolid; // block used in lakes of the surface. In vanilla, this is sand or clay. [X]
 	public CoreType coreType; // DONE
 
- public static Block[][] coreTemperatureBlocks;
+ public static Block[] coreBlocks;
+
 
 	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "rn", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "nk", "ji", "pod",
 			"ch", "mre", "ite", "rs" };
@@ -91,8 +92,14 @@ public class PlanetData {
 		data.name = "";
 
 		int length = range(2, 5);
-		for (int i = 0; i < length; i++)
-			data.name += nameChunks[range(nameChunks.length)];
+  boolean isVowel = range(0, 2) == 0;
+		for (int i = 0; i < length; i++){
+   String s = range(nameChunks.length);
+   for(boolean v = "aieou".indexOf(s.getCharAt(0)) == -1; isVowel ? !v : v; s = range(nameChunks.length)){
+    data.name += s;
+    isVowel = "aieou".indexOf(s.getCharAt(s.length()-1)) != -1;
+   }
+  }
 
 		data.name = data.name.substring(0, 1).toUpperCase() + data.name.substring(1);
 
@@ -100,7 +107,6 @@ public class PlanetData {
 
 		data.temperature = range(0f, 1f);
 		data.hillyness = range(0f, 1f);
-		data.pressure = range(0f, 1f);
 		data.worldScale = range(0.2f, 0.9f);
 		data.gravity = 0.04f + range(-0.03f, 0.03f);
 		
@@ -112,6 +118,9 @@ public class PlanetData {
 			for (IAtmosphericGas gas : IAtmosphericGas.values())
 				if (range(3) == 0)
 					data.gases.add(gas);
+
+  if(!data.gases.isEmpty()) 
+    data.pressure = range(0f, 1f);
 
 		data.meteorFrequency = range(0.2f, 4f) + data.gases.size();
 
