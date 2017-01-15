@@ -59,7 +59,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
  
     @Override
     public double getMeteorFrequency() {
-        return 7;
+        return planet.data.meteorFrequency;
     }
  
     @Override
@@ -69,7 +69,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
  
     @Override
     public float getThermalLevelModifier() {
-        return -2;
+        return (planet.data.temperature - 0.5f)*6;
     }
  
     @Override
@@ -79,7 +79,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
  
     @Override
     public boolean canRainOrSnow() {
-        return true;
+        return false;
     }
  
      //Created later
@@ -95,12 +95,12 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
  
     @Override
     public Vector3 getFogColor() {
-        return new Vector3(0.8f, 0.7f, 0.2f);
+        return planet.data.fogColor;
     }
  
     @Override
     public Vector3 getSkyColor() {
-        return new Vector3(0.7f, 0.3f, 0.2f);
+        return planet.data.skyColor;
     }
     
     @Override
@@ -122,12 +122,12 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
     //Can players respawn here?
     @Override
     public boolean shouldForceRespawn() {
-        return true;
+        return false;
     }
  
     @Override
     public double getSolarEnergyMultiplier() {
-        return 1.1f;
+        return 1f;
     }
  
     @Override
@@ -170,7 +170,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
 
 	@Override
 	public String getDimensionName() {
-		return "Unknown Planet";
+		return planet.data.name;
 	}
 	
 	@Override

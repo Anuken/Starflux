@@ -87,7 +87,10 @@ public class PlanetData {
 	}
 
 	public static PlanetData createPlanetData(int id) {
-		PlanetData data = new PlanetData();
+		 boolean tf = Loader.isModLoaded("ThermalFoundation");
+  boolean tc = Loader.isModLoaded("TConstruct");
+
+  PlanetData data = new PlanetData();
 
 		data.name = "";
 
@@ -164,7 +167,7 @@ public class PlanetData {
 		if (data.temperature > 0.8f) {
 
 			// try to use a molten metal liquid, if possible
-			if (Loader.isModLoaded("TConstruct") && range(2) == 0) {
+			if (tc && range(2) == 0) {
 				MineralDeposit max = null;
 				for (MineralDeposit mineral : data.minerals) {
 					if (max == null || mineral.amount > max.amount) {
@@ -182,7 +185,7 @@ public class PlanetData {
 				}else{
 					surfaceLiquid = Blocks.lava;
 				}
-			} else if (Loader.isModLoaded("ThermalFoundation")) {
+			} else if (tf) {
 				if(data.pressure > 0.9f){
 					surfaceLiquid = TFBlocks.blockFluidCoal;
 				}else if(range(2) == 0){
@@ -194,7 +197,7 @@ public class PlanetData {
 				surfaceLiquid = Blocks.lava;
 			}
 		}else if(data.temperature <  0.2f){ //low temperature
-			if(Loader.isModLoaded("ThermalFoundation")){
+			if(tf){
 				
 			}
 		}
@@ -207,12 +210,12 @@ public class PlanetData {
 			//TODO remove this
 			data.coreBlock = Blocks.netherrack;
 			data.coreLiquid = TFBlocks.blockFluidPyrotheum;
-			if (data.temperature > 0.8f) {
-
+			if (data.temperature > 0.7f) {
+   
 				// try to use a molten metal liquid, if possible
-				if (Loader.isModLoaded("TConstruct")) {
+				if (tc) {
 
-				} else if (Loader.isModLoaded("ThermalFoundation")) {
+				} else if (tf) {
 
 				} else { // no mods loaded, just use lava for the liquid
 					surfaceLiquid = Blocks.lava;
@@ -223,7 +226,7 @@ public class PlanetData {
 			data.coreBlock = Blocks.packed_ice;
 			coreLiquid = TFBlocks.blockFluidCryotheum;
 
-			if (Loader.isModLoaded("ThermalFoundation")) {
+			if (tf) {
 				if (data.temperature < 0.2) {
 					coreLiquid = TFBlocks.blockFluidCryotheum;
 				}
