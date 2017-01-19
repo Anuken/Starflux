@@ -44,7 +44,7 @@ public abstract class ObjectGenerator extends WorldGenAbstractTree {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		if (random.nextInt(chance) == 0 && (genBlock == null || world.getBlock(x, y-1, z) == genBlock))
+		if (random.nextInt(chance/2) == 0 && (genBlock == null || world.getBlock(x, y-1, z) == genBlock))
 			generate();
 		return false;
 	}

@@ -2,6 +2,8 @@ package io.anuke.starflux.generation;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.anuke.starflux.Starflux;
 import io.anuke.starflux.planets.ProceduralPlanet;
 import io.anuke.starflux.util.DefaultCloudRenderer;
@@ -11,6 +13,7 @@ import micdoodle8.mods.galacticraft.api.vector.Vector3;
 import micdoodle8.mods.galacticraft.api.world.IExitHeight;
 import micdoodle8.mods.galacticraft.api.world.ISolarLevel;
 import micdoodle8.mods.galacticraft.api.world.ITeleportType;
+import micdoodle8.mods.galacticraft.core.client.CloudRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Vec3;
@@ -179,12 +182,19 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
     }
 	
 	@Override
+    @SideOnly(Side.CLIENT)
+    public float getStarBrightness(float par1){
+		return 1f;
+	}
+    
+	
+	@Override
 	public float getCloudHeight(){
 		return 90f + planet.data.hillyness*120 ;
 	}
 	
 	@Override
     public IRenderHandler getCloudRenderer(){
-        return new DefaultCloudRenderer();
+        return planet.data.hasClouds ? new CloudRenderer() : new DefaultCloudRenderer();
     }
 }

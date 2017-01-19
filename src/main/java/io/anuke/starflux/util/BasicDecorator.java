@@ -52,9 +52,12 @@ public abstract class BasicDecorator extends BiomeDecoratorSpace {
 		for (OreGenerator gen : oregenerators)
 			generateOre(gen.amount, gen.gen, gen.miny, gen.maxy);
 
-		for (ObjectGenerator gen : objectgenerators)
-			gen.generate(this.getCurrentWorld(), this.rand, this.chunkX+8,
-					getCurrentWorld().getTopSolidOrLiquidBlock(chunkX+8, chunkZ+8), this.chunkZ+8);
+		for (ObjectGenerator gen : objectgenerators){
+			int x = this.chunkX + rand.nextInt(16);
+			int z = this.chunkZ + rand.nextInt(16);
+			gen.generate(this.getCurrentWorld(), this.rand, x,
+					getCurrentWorld().getTopSolidOrLiquidBlock(x, z), z);
+		}
 
 	}
 

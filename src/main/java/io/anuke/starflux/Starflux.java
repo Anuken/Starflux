@@ -5,6 +5,7 @@ import java.util.HashMap;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import io.anuke.starflux.generation.ProceduralWorldProvider;
 import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.planets.ProceduralPlanet;
@@ -22,6 +23,11 @@ public class Starflux{
     private static int lastID = 10;
     
     public static HashMap<Integer, ProceduralPlanet> planets = new HashMap<Integer, ProceduralPlanet>();
+    
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+    	StarfluxBlocks.create();
+    }
     
     @EventHandler
     public void init(FMLInitializationEvent event) {

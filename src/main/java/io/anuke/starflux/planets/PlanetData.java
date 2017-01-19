@@ -48,6 +48,7 @@ public class PlanetData{
 	public Vec3 skyColor; // DONE
 	public Vec3 fogColor; // DONE
 	public Vec3 cloudColor; // DONE
+	public boolean hasClouds;
 	public int waterLevel; // DONE
 	public Block surfaceLiquid; // X
 	public Block coreLiquid; // X
@@ -193,6 +194,12 @@ public class PlanetData{
 		data.fogColor = data.skyColor.addVector(range(-0.1f, 0.1f), range(-0.1f, 0.1f), range(-0.1f, 0.1f));
 
 		data.cloudColor = data.skyColor.addVector(range(-0.2f, 0.2f), range(-0.2f, 0.2f), range(-0.2f, 0.2f));
+		
+		if(!data.hasAtmosphere()){
+			data.skyColor = data.fogColor = data.cloudColor = Vec3.createVectorHelper(0, 0, 0);
+		}
+		
+		data.hasClouds = data.hasAtmosphere() && range(4) != 0;
 
 		data.minerals = new ArrayList<MineralDeposit>();
 
@@ -299,7 +306,7 @@ public class PlanetData{
 			data.coreBlock = data.stoneBlock.getBlock();
 			coreLiquid = Blocks.water;
 		}else{
-			coreLiquid = Blocks.stone;
+			coreLiquid = Blocks.ice;
 		}
 
 		data.coreBlock = stoneBlocks[range(stoneBlocks.length)];
@@ -328,6 +335,8 @@ public class PlanetData{
 		for(int x = 0; x < bsize; x++){
 			for(int y = 0; y < bsize; y++){
 				data.blocks[x][y] = x < y ? tempBlocks[clamp((float) x / bsize * tempBlocks.length / 2 + data.temperature * tempBlocks.length / 2 + MathUtils.random(-2, 2), 0, tempBlocks.length - 1)] : heightBlocks[clamp((float) y / bsize * heightBlocks.length / 2 + data.hillyness * heightBlocks.length / 2 + MathUtils.random(-2, 2), 0, heightBlocks.length - 1)];
+				if(!data.gases.contains(IAtmosphericGas.OXYGEN) && (data.blocks[x][y] == Blocks.grass || data.blocks[x][y] == Blocks.mycelium))
+					data.blocks[x][y] = stoneBlocks[range(stoneBlocks.length)];
 			}
 		}
 
