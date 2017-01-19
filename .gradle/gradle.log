@@ -5,6 +5,16 @@
  R4wk, ZeuX, IngisKahn, bspkrs
  MCP Data version : unknown
 ****************************
+:downloadClient SKIPPED
+:downloadServer SKIPPED
+:getVersionJson
+:extractUserDev UP-TO-DATE
+:mergeJars SKIPPED
+:applyBinPatches SKIPPED
+:downloadMcpTools SKIPPED
+:extractMcpData UP-TO-DATE
+:genSrgs SKIPPED
+:deobfBinJar SKIPPED
 :compileApiJava UP-TO-DATE
 :processApiResources UP-TO-DATE
 :apiClasses UP-TO-DATE
@@ -19,10 +29,6 @@
 :processTestResources UP-TO-DATE
 :testClasses UP-TO-DATE
 :test UP-TO-DATE
-:extractMcpData UP-TO-DATE
-:getVersionJson
-:extractUserDev UP-TO-DATE
-:genSrgs SKIPPED
 :reobf
 :assemble
 :check UP-TO-DATE
@@ -30,4 +36,4 @@
 
 BUILD SUCCESSFUL
 
-Total time: 12.906 secs
+Total time: 18.438 secs

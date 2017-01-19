@@ -95,12 +95,12 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
  
     @Override
     public Vector3 getFogColor() {
-        return planet.data.fogColor;
+        return new Vector3(planet.data.fogColor);
     }
  
     @Override
     public Vector3 getSkyColor() {
-        return planet.data.skyColor;
+        return new Vector3(planet.data.skyColor);
     }
     
     @Override
@@ -175,7 +175,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
 	
 	@Override
     public Vec3 drawClouds(float partialTicks){
-        return Vec3.createVectorHelper(1f,0.2f,0.2f);//worldObj.drawCloudsBody(partialTicks);
+        return planet.data.cloudColor;
     }
 	
 	@Override

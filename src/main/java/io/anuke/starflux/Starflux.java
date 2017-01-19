@@ -21,13 +21,11 @@ public class Starflux{
     public static final String ASSETPREFIX = "starflux";
     private static int lastID = 10;
     
-    //public static Planet planet;
     public static HashMap<Integer, ProceduralPlanet> planets = new HashMap<Integer, ProceduralPlanet>();
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	createNewPlanet();
-    	createNewPlanet();
+    	for(int i = 0; i < 5; i ++)
     	createNewPlanet();
     }
     

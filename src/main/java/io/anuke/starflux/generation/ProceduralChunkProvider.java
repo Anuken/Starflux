@@ -18,11 +18,10 @@ import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 
 public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	float scale = 0.3f;
-	int water = 40;
 	int lava = 7;
 	int bedrock = 1;
 	int lavacave = 18;
-	RidgedPerlin rid = new RidgedPerlin(2, 1, 0.4f);
+	RidgedPerlin ridges = new RidgedPerlin(2, 1, 0.4f);
 	RidgedPerlin cave = new RidgedPerlin(3, 2, 0.4f);
 	RidgedPerlin cave2 = new RidgedPerlin(4, 1, 0.4f);
 	BiomeDecoratorSpace decorator;
@@ -57,7 +56,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 				int nz = wz + 99999;
 
 				float elevation = getElevation(wx, wz);
-				double elevationmaterial = (Noise.nnoise(wx, wz, 60, 0.125f / 2));
+				//double elevationmaterial = (Noise.nnoise(wx, wz, 60, 0.125f / 2));
 				double temp = getTemperature(wx, wz);
 				double height = terrainHeight(elevation);
 				double lavacaveheight = lavacave + Noise.nnoise(nx, nz, 70, 8f) + Noise.nnoise(nx, nz, 10, 8f)
@@ -66,30 +65,13 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 						+ Noise.nnoise(nx, nz, 3, 12f) + Noise.nnoise(nx, nz, 7, 27f);
 				double bedrockheight = bedrock + Noise.nnoise(wx, nz, 30, 2f) + Noise.nnoise(wx, nz, 10, 2f);
 
-				for (int y = 0; y < Math.max(height, water); y++) {
+				for (int y = 0; y < Math.max(height, data.waterLevel); y++) {
 					Block block = Blocks.stone;
 
 					// top block
 					if (y + 1 >= height) {
-						if (temp < 0.4f) {
-							block = Blocks.grass;
-						} else if (temp < 0.56f) {
-							block = Blocks.clay;
-						} else if (temp < 0.8f) {
-							block = Blocks.hardened_clay;
-						} else if (temp < 1f) {
-							block = Blocks.obsidian;
-						}
+						block = data.blocks[(int)((height)*data.blocks.length)][(int)(temp*data.blocks[0].length)];
 					}
-
-					if (y + 1 >= height)
-						if (elevationmaterial > 0.8) {
-							block = Blocks.packed_ice;
-						} else if (elevationmaterial > 0.7) {
-							block = Blocks.snow;
-						} else if (elevationmaterial > 0.6) {
-							block = Blocks.stone;
-						}
 
 					if (y >= height)
 						block = data.surfaceLiquid;
@@ -107,7 +89,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 						block = data.coreLiquid;
 
 					if (y <= lavafloorheight)
-						block = Blocks.stone;
+						block = data.coreBlock;
 
 					if (y <= bedrockheight)
 						block = Blocks.bedrock;
@@ -233,7 +215,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4));
 		elevation += (Noise.nnoise(x, y, octave / 128, 0.125f / 16));
 		// elevation += (Noise.nnoise(x, y, octave / 128, 0.125f));
-		elevation += (rid.getValue(x, y, 0, 0.006f) + 0.5f) / 20f;
+		elevation += (ridges.getValue(x, y, 0, 0.006f) + 0.5f) / 20f;
 		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4));
 
 		elevation /= 0.84;
