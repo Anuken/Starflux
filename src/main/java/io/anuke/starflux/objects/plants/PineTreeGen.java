@@ -8,12 +8,12 @@ public class PineTreeGen extends ObjectGenerator {
 	public boolean snow;
 	
 	{
-		chance = 40;
+		chance = 30;
 		genBlock = Blocks.grass;
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.1 && data.temperature < 0.5f && data.temperature > 0.2f;
+		return Math.random() < 0.1 && data.temperature < 0.5f && data.temperature > 0.1f;
 	}
 
 	@Override

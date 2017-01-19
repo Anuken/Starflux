@@ -58,13 +58,13 @@ public class PlanetData{
 
 	public static Block[] coreBlocks;
 
-	public static Block[] tempBlocks = { Blocks.packed_ice, Blocks.snow, Blocks.stone, Blocks.sand, Blocks.gravel, Blocks.grass, Blocks.grass, Blocks.clay, Blocks.hardened_clay, Blocks.stained_hardened_clay, Blocks.netherrack, Blocks.soul_sand };
+	public static Block[] tempBlocks = { Blocks.packed_ice, Blocks.snow, Blocks.stone, Blocks.sand, Blocks.gravel, Blocks.grass, Blocks.clay, Blocks.hardened_clay, Blocks.stained_hardened_clay, Blocks.netherrack, Blocks.soul_sand };
 
-	public static Block[] heightBlocks = { Blocks.grass, Blocks.stone, Blocks.gravel, Blocks.mossy_cobblestone, Blocks.cobblestone, Blocks.grass, Blocks.mycelium, Blocks.dirt, Blocks.clay, Blocks.ice, Blocks.stone, Blocks.snow };
+	public static Block[] heightBlocks = { Blocks.grass, Blocks.stone, Blocks.gravel, Blocks.mossy_cobblestone, Blocks.cobblestone, Blocks.grass, Blocks.mycelium, Blocks.clay, Blocks.ice, Blocks.stone, Blocks.snow };
 
 	public static Block[] stoneBlocks = { Blocks.stone, Blocks.soul_sand, Blocks.packed_ice, Blocks.hardened_clay, Blocks.packed_ice, Blocks.obsidian };
 
-	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "rn", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "nk", "ji", "pod", "ch", "mre", "ite", "rs" };
+	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "ri", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "ner", "ji", "pod", "ch", "mer", "ite", "rs" };
 
 	static Class<?>[] objectClasses = { SpikeGen.class, BushGen.class, ClumpTreeGen.class, GrassPatchGen.class, PineTreeGen.class, TreeGen.class, BoulderGen.class, LargeBoulderGen.class, RockGen.class, RockSpikeGen.class, SpikeGen.class, ClawGen.class, CupFlowerGen.class, GrassTentacleGen.class, OrbFlowerGen.class, StarFlowerGen.class, TentacleGen.class, VineGen.class };
 
@@ -204,7 +204,7 @@ public class PlanetData{
 		float add = data.pressure / 8f;
 		for(Mineral m : Mineral.values()){
 			if(m != Mineral.diamond)
-				data.minerals.add(new MineralDeposit(m, (range(3) == 0 ? range(0f, 0.1f) : add + (range(4) == 0 ? range(0.3f, 1f) : range(0, 0.6f)))));
+				data.minerals.add(new MineralDeposit(m, (range(2) == 0 ? range(0f, 0.1f) : add + (range(4) == 0 ? range(0.3f, 1f) : range(0, 0.6f)))));
 		}
 
 		if(data.temperature <= 0.5 && range(3) == 0){
@@ -247,7 +247,7 @@ public class PlanetData{
 				if(data.pressure > 0.9f){
 					surfaceLiquid = TFBlocks.blockFluidCoal;
 				}else if(range(2) == 0){
-					surfaceLiquid = (new Block[] { TFBlocks.blockFluidEnder, TFBlocks.blockFluidRedstone, TFBlocks.blockFluidPetrotheum })[range(3)];
+					surfaceLiquid = (new Block[] { TFBlocks.blockFluidMana, TFBlocks.blockFluidRedstone, TFBlocks.blockFluidPetrotheum })[range(3)];
 				}else{
 					surfaceLiquid = Blocks.lava;
 				}
@@ -256,7 +256,7 @@ public class PlanetData{
 			}
 		}else if(data.temperature < 0.2f){ // low temperature
 			if(tf){
-				surfaceLiquid = Math.random() < 0.5 ? TFBlocks.blockFluidCryotheum : TFBlocks.blockFluidEnder;
+				surfaceLiquid = Math.random() < 0.5 ? TFBlocks.blockFluidCryotheum : TFBlocks.blockFluidPetrotheum;
 			}else{
 				surfaceLiquid = Blocks.ice;
 			}
@@ -275,34 +275,31 @@ public class PlanetData{
 		Block coreLiquid = Blocks.air;
 
 		if(data.coreType == CoreType.molten){
-			// TODO remove this
 			data.coreBlock = Blocks.netherrack;
-			coreLiquid = TFBlocks.blockFluidPyrotheum;
 			if(data.temperature > 0.7f){
-
 				// try to use a molten metal liquid, if possible
-				if(tc){
-
+				if(tc && range(2) == 0){
+					coreLiquid = new Block[]{TinkerSmeltery.moltenCopper, TinkerSmeltery.moltenIron, TinkerSmeltery.moltenTin, TinkerSmeltery.moltenAlumite, TinkerSmeltery.moltenElectrum}[range(5)];
 				}else if(tf){
-
+					coreLiquid = TFBlocks.blockFluidCoal;
 				}else{ // no mods loaded, just use lava for the liquid
 					surfaceLiquid = Blocks.lava;
 				}
+			}else{
+				data.coreBlock = Blocks.lava;
 			}
-			// TODO
 		}else if(data.coreType == CoreType.frozen){
 			data.coreBlock = Blocks.packed_ice;
-			coreLiquid = TFBlocks.blockFluidCryotheum;
-
-			if(tf){
-				if(data.temperature < 0.2){
-					coreLiquid = TFBlocks.blockFluidCryotheum;
-				}
-				// TODO
+			if(tf && range(2) == 0){
+				coreLiquid = TFBlocks.blockFluidCryotheum;
+			}else{
+				coreLiquid = Blocks.ice;
 			}
 		}else if(data.coreType == CoreType.water){
 			data.coreBlock = data.stoneBlock.getBlock();
 			coreLiquid = Blocks.water;
+		}else{
+			coreLiquid = Blocks.stone;
 		}
 
 		data.coreBlock = stoneBlocks[range(stoneBlocks.length)];
@@ -320,8 +317,8 @@ public class PlanetData{
 
 		data.waterLevel = range(30, 70);
 
-		// ocean planets are 1 out of 6
-		if(range(6) == 0)
+		// ocean planets are 1 out of 8
+		if(range(8) == 0)
 			data.waterLevel = range(90, 140);
 
 		int bsize = 6;

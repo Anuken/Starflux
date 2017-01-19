@@ -10,7 +10,7 @@ public class RockSpikeGen extends ObjectGenerator{
 	{chance = 30;}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.03 && data.temperature > 0.6f;
+		return Math.random() < 0.1 && data.temperature > 0.4f;
 	}
 
 	@Override

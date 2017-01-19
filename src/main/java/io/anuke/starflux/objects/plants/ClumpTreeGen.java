@@ -9,12 +9,12 @@ public class ClumpTreeGen extends ObjectGenerator{
 	public float srad = 0.3f;
 	
 	{
-		chance = 50;
+		chance = 40;
 		genBlock = Blocks.grass;
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.1 && data.temperature < 0.7f && data.temperature > 0.3f;
+		return Math.random() < 0.24 && data.temperature < 0.7f && data.temperature > 0.3f;
 	}
 
 	@Override

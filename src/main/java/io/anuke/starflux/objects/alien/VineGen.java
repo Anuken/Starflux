@@ -7,12 +7,12 @@ import net.minecraft.init.Blocks;
 public class VineGen extends ObjectGenerator {
 
 	{
-		chance = 40;
+		chance = 20;
 		genBlock = Blocks.mycelium;
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.12 && data.temperature < 0.8f && data.temperature > 0.4f;
+		return Math.random() < 0.2 && data.temperature < 0.8f && data.temperature > 0.4f;
 	}
 	
 	boolean stars = true;

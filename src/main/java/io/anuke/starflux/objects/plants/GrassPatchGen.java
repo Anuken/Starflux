@@ -8,12 +8,12 @@ import net.minecraft.init.Blocks;
 public class GrassPatchGen extends ObjectGenerator{
 	
 	{
-		chance = 20;
+		chance = 10;
 		genBlock = Blocks.grass;
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.3 && data.temperature < 0.7f && data.temperature > 0.3f;
+		return Math.random() < 0.4 && data.temperature < 0.7f && data.temperature > 0.3f;
 	}
 	
 	@Override

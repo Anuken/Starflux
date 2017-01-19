@@ -7,7 +7,7 @@ import net.minecraft.init.Blocks;
 public class RockGen extends ObjectGenerator {
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.2 && data.temperature > 0.2f;
+		return Math.random() < 0.3;
 	}
 	
 	@Override

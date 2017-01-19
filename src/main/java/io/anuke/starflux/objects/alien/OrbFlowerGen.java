@@ -8,12 +8,12 @@ import net.minecraft.init.Blocks;
 public class OrbFlowerGen extends ObjectGenerator {
 
 	{
-		chance = 65;
+		chance = 60;
 		genBlock = Blocks.mycelium;
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.07 && data.temperature < 0.7f && data.temperature > 0.4f;
+		return Math.random() < 0.1 && data.temperature < 0.7f && data.temperature > 0.4f;
 	}
 
 	@Override

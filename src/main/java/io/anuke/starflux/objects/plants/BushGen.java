@@ -13,7 +13,7 @@ public class BushGen extends ObjectGenerator{
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.35 && data.temperature < 0.7f && data.temperature > 0.3f;
+		return Math.random() < 0.4 && data.temperature < 0.7f && data.temperature > 0.3f;
 	}
 
 	@Override

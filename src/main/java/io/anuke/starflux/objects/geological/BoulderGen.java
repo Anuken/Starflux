@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 public class BoulderGen extends ObjectGenerator{
 	
 	public BoulderGen(){
-		super(10);
+		super(5);
 	}
 	
 	public boolean add(PlanetData data){
