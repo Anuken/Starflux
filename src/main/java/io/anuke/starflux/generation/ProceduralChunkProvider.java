@@ -55,7 +55,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 				int nz = wz + 99999;
 
 				float elevation = getElevation(wx, wz);
-				double elevationmaterial = (Noise.nnoise(wx, wz, 60, 0.125f / 2))+elevation;
+				double elevationmaterial = (Noise.nnoise(wx, wz, 30, 0.125f))+elevation;
 				double temp = getTemperature(wx, wz);
 				double height = terrainHeight(elevation);
 				double lavacaveheight = lavacave + Noise.nnoise(nx, nz, 70, 8f) + Noise.nnoise(nx, nz, 10, 8f)
@@ -70,6 +70,9 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 					// top block
 					if (y + 1 >= height) {
 						block = data.blocks[(int)((elevationmaterial)*(data.blocks.length-1))][(int)(temp*(data.blocks[0].length-1))];
+						if(y <= data.waterLevel){
+							block = data.surfaceLiquidSolid.getBlock();
+						}
 					}
 
 					if (y >= height)
@@ -122,13 +125,15 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	}
 
 	float terrainHeight(float elevation) {
-		return 20 + elevation * (80+data.hillyness*100);
+		return 20 + elevation * (60+data.hillyness*70);
 	}
 
 	void genTopBlock(int x, int y, int z) {
 		if (!data.hasSnow) {
-			if (getBlock(x, y, z) == Blocks.grass && rand.nextFloat() < 0.2f)
+			if (getBlock(x, y, z) == Blocks.grass && rand.nextFloat() < 0.2f){
 				setBlock(x, y + 1, z, Blocks.tallgrass, 1);
+				if(rand.nextFloat() < 0.01f) setBlock(x, y + 1, z, Blocks.yellow_flower, 1);
+			}
 		} else if(getBlock(x, y, z) != null && getBlock(x, y, z).getMaterial().isSolid()){
 			float elevation = terrainHeight(getElevation(x+chunkx*16, z+chunkz*16));
 			setBlock(x, y + 1, z, Blocks.snow_layer, (int)((elevation%1)*8));

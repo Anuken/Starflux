@@ -1,6 +1,7 @@
 package io.anuke.starflux.objects.geological;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 
@@ -8,6 +9,10 @@ public class SpikeGen extends ObjectGenerator{
 	
 	public SpikeGen() {
 		super(100);
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.09 && data.temperature < 0.6f;
 	}
 
 	Block blocka, blockb;

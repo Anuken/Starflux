@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.MathUtils;
 import cofh.thermalfoundation.block.TFBlocks;
 import cpw.mods.fml.common.Loader;
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.objects.alien.*;
+import io.anuke.starflux.objects.geological.*;
+import io.anuke.starflux.objects.plants.*;
 import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -33,7 +36,7 @@ public class PlanetData{
 	public float gravity; // DONE
 	public float meteorFrequency; // DONE
 	// public PlantType plantType; //bad idea?
-	public ObjectGenerator[] objects; // DONE
+	public ArrayList<ObjectGenerator> objects; // DONE
 	public float caveSize; // DONE
 	public boolean hasCaves; // DONE
 	public boolean hasSnow; // DONE
@@ -55,13 +58,15 @@ public class PlanetData{
 
 	public static Block[] coreBlocks;
 
-	public static Block[] tempBlocks = { Blocks.packed_ice, Blocks.snow, Blocks.stone, GCBlocks.blockMoon, Blocks.clay, Blocks.hardened_clay, Blocks.stained_hardened_clay, Blocks.netherrack, Blocks.soul_sand };
+	public static Block[] tempBlocks = { Blocks.packed_ice, Blocks.snow, Blocks.stone, Blocks.sand, Blocks.gravel, Blocks.grass, Blocks.grass, Blocks.clay, Blocks.hardened_clay, Blocks.stained_hardened_clay, Blocks.netherrack, Blocks.soul_sand };
 
-	public static Block[] heightBlocks = { Blocks.grass, Blocks.stone, Blocks.mossy_cobblestone, Blocks.cobblestone, Blocks.mycelium, Blocks.dirt, Blocks.clay, Blocks.ice, Blocks.stone, Blocks.snow };
+	public static Block[] heightBlocks = { Blocks.grass, Blocks.stone, Blocks.gravel, Blocks.mossy_cobblestone, Blocks.cobblestone, Blocks.grass, Blocks.mycelium, Blocks.dirt, Blocks.clay, Blocks.ice, Blocks.stone, Blocks.snow };
 
-	public static Block[] stoneBlocks = { Blocks.stone, TinkerSmeltery.blood, Blocks.packed_ice, Blocks.hardened_clay, Blocks.packed_ice, Blocks.obsidian };
+	public static Block[] stoneBlocks = { Blocks.stone, Blocks.soul_sand, Blocks.packed_ice, Blocks.hardened_clay, Blocks.packed_ice, Blocks.obsidian };
 
 	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "rn", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "nk", "ji", "pod", "ch", "mre", "ite", "rs" };
+
+	static Class<?>[] objectClasses = { SpikeGen.class, BushGen.class, ClumpTreeGen.class, GrassPatchGen.class, PineTreeGen.class, TreeGen.class, BoulderGen.class, LargeBoulderGen.class, RockGen.class, RockSpikeGen.class, SpikeGen.class, ClawGen.class, CupFlowerGen.class, GrassTentacleGen.class, OrbFlowerGen.class, StarFlowerGen.class, TentacleGen.class, VineGen.class };
 
 	static enum CoreType{
 		molten, frozen, water, none
@@ -72,14 +77,7 @@ public class PlanetData{
 	}
 
 	public static enum Mineral{
-		iron(Blocks.redstone_ore), lead(TFBlocks.blockOre, 3), 
-		diamond(Blocks.diamond_ore), copper(TFBlocks.blockOre), 
-		tin(TFBlocks.blockOre, 1), aluminum(GCBlocks.basicBlock, 7), 
-		silver(TFBlocks.blockOre, 2), 
-		gold(Blocks.gold_ore), redstone(Blocks.redstone_ore), 
-		emerald(Blocks.emerald_ore), coal(Blocks.coal_ore), 
-		clay(Blocks.clay), glowstone(Blocks.glowstone), 
-		oil(GalacticraftCore.fluidOil.getBlock());
+		iron(Blocks.redstone_ore), lead(TFBlocks.blockOre, 3), diamond(Blocks.diamond_ore), copper(TFBlocks.blockOre), tin(TFBlocks.blockOre, 1), aluminum(GCBlocks.basicBlock, 7), silver(TFBlocks.blockOre, 2), gold(Blocks.gold_ore), redstone(Blocks.redstone_ore), emerald(Blocks.emerald_ore), coal(Blocks.coal_ore), clay(Blocks.clay), glowstone(Blocks.glowstone), oil(GalacticraftCore.fluidOil.getBlock());
 
 		private BlockMetaPair block;
 
@@ -121,7 +119,7 @@ public class PlanetData{
 		for(int ik = 0; ik < 10; ik++){
 			String name = "";
 
-			int length = range(3, 6);
+			int length = range(2, 5);
 			boolean endsvowel = Math.random() < 0.5;
 			for(int i = 0; i < length; i++){
 				String next = nameChunks[range(nameChunks.length)];
@@ -249,7 +247,7 @@ public class PlanetData{
 				if(data.pressure > 0.9f){
 					surfaceLiquid = TFBlocks.blockFluidCoal;
 				}else if(range(2) == 0){
-					surfaceLiquid = (new Block[] { TFBlocks.blockFluidEnder, TFBlocks.blockFluidRedstone, TFBlocks.blockFluidAerotheum })[range(3)];
+					surfaceLiquid = (new Block[] { TFBlocks.blockFluidEnder, TFBlocks.blockFluidRedstone, TFBlocks.blockFluidPetrotheum })[range(3)];
 				}else{
 					surfaceLiquid = Blocks.lava;
 				}
@@ -261,6 +259,14 @@ public class PlanetData{
 				surfaceLiquid = Math.random() < 0.5 ? TFBlocks.blockFluidCryotheum : TFBlocks.blockFluidEnder;
 			}else{
 				surfaceLiquid = Blocks.ice;
+			}
+		}else{ //normal temperature
+			if(range(2) == 0){
+				surfaceLiquid = Blocks.water;
+			}else if(tf && range(3) == 0){
+				surfaceLiquid = TFBlocks.blockFluidRedstone;
+			}else{
+				surfaceLiquid = Blocks.water;
 			}
 		}
 
@@ -298,15 +304,13 @@ public class PlanetData{
 			data.coreBlock = data.stoneBlock.getBlock();
 			coreLiquid = Blocks.water;
 		}
-		
+
 		data.coreBlock = stoneBlocks[range(stoneBlocks.length)];
-		
+
 		data.coreLiquid = coreLiquid;
 
 		// data.plantType = (data.temperature < 0.12f || data.temperature >
 		// 0.78f) ? (range(2) == 0 ? PlantType.dead : PlantType.rocky)
-
-		data.objects = new ObjectGenerator[] {};
 
 		data.hasSnow = data.temperature < 0.3f && range(3) != 0; // snow only in low temperatures
 
@@ -329,6 +333,24 @@ public class PlanetData{
 				data.blocks[x][y] = x < y ? tempBlocks[clamp((float) x / bsize * tempBlocks.length / 2 + data.temperature * tempBlocks.length / 2 + MathUtils.random(-2, 2), 0, tempBlocks.length - 1)] : heightBlocks[clamp((float) y / bsize * heightBlocks.length / 2 + data.hillyness * heightBlocks.length / 2 + MathUtils.random(-2, 2), 0, heightBlocks.length - 1)];
 			}
 		}
+
+		data.objects = new ArrayList<ObjectGenerator>();
+
+		for(Class<?> c : objectClasses){
+			try{
+				for(int i = 0; i < range(1, 2); i++){
+					ObjectGenerator gen = (ObjectGenerator) c.newInstance();
+					if(gen.add(data)){
+						gen.setup(data);
+						data.objects.add(gen);
+					}
+				}
+			}catch(Exception e){
+
+			}
+		}
+		
+		data.surfaceLiquidSolid = new BlockMetaPair(stoneBlocks[range(stoneBlocks.length)], (byte)0);
 
 		System.out.println("Generated planet data: \n" + data.toString());
 

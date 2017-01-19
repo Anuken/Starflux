@@ -30,7 +30,7 @@ public abstract class BasicDecorator extends BiomeDecoratorSpace {
 		objectgenerators.add(gen);
 	}
 	
-	public void addObjectGenerators(ObjectGenerator... gens) {
+	public void addObjectGenerators(Iterable<ObjectGenerator> gens) {
 		for(ObjectGenerator gen : gens)
 			objectgenerators.add(gen);
 	}

@@ -1,10 +1,19 @@
 package io.anuke.starflux.objects.alien;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import net.minecraft.init.Blocks;
 
 public class TentacleGen extends ObjectGenerator{
-	{chance = 40;}
+	
+	{
+		chance = 40;
+		genBlock = Blocks.mycelium;
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.12 && data.temperature < 0.8f && data.temperature > 0.4f;
+	}
 
 	@Override
 	public void generate() {

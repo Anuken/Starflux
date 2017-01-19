@@ -14,9 +14,6 @@ public class ProceduralBiomeDecorator extends BasicDecorator{
 			addGenerator(mineral.mineral.getBlock().getBlock(), mineral.mineral.getBlock().getMetadata(), data.stoneBlock.getBlock(), (int)(mineral.amount*20), (int)(mineral.amount*60), 0, 120);
 		}
 		
-		//addObjectGenerator(new BoulderGen());
-		//addObjectGenerator(new SpikeGen());
-		
 		addObjectGenerators(data.objects);
 	}
 }

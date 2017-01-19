@@ -1,12 +1,18 @@
 package io.anuke.starflux.objects.plants;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import net.minecraft.init.Blocks;
 
 public class TreeGen extends ObjectGenerator {
 	
-	public TreeGen(){
-		super(70);
+	{
+		chance = 70;
+		genBlock = Blocks.grass;
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.1 && data.temperature < 0.8f && data.temperature > 0.2f;
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class Starflux{
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	for(int i = 0; i < 5; i ++)
+    	for(int i = 0; i < 10; i ++)
     	createNewPlanet();
     }
     

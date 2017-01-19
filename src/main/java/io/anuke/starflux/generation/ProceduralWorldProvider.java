@@ -180,7 +180,7 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
 	
 	@Override
 	public float getCloudHeight(){
-		return 128f;
+		return 90f + planet.data.hillyness*120 ;
 	}
 	
 	@Override

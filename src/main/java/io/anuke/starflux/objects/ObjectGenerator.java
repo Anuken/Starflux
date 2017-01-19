@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.util.Trig;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
@@ -17,6 +18,7 @@ public abstract class ObjectGenerator extends WorldGenAbstractTree {
 	public World world;
 	public Random rand;
 	public int chance;
+	public Block genBlock;
 
 	public ObjectGenerator(int chance) {
 		super(false);
@@ -26,6 +28,14 @@ public abstract class ObjectGenerator extends WorldGenAbstractTree {
 	public ObjectGenerator() {
 		this(40);
 	}
+	
+	public boolean add(PlanetData data){
+		return false;
+	}
+	
+	public void setup(PlanetData data){
+		
+	}
 
 	@Override
 	public boolean generate(World world, Random random, int x, int y, int z) {
@@ -34,7 +44,7 @@ public abstract class ObjectGenerator extends WorldGenAbstractTree {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		if (random.nextInt(chance) == 0)
+		if (random.nextInt(chance) == 0 && (genBlock == null || world.getBlock(x, y-1, z) == genBlock))
 			generate();
 		return false;
 	}

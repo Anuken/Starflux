@@ -1,10 +1,20 @@
 package io.anuke.starflux.objects.plants;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.util.Trig;
 import net.minecraft.init.Blocks;
 
 public class GrassPatchGen extends ObjectGenerator{
+	
+	{
+		chance = 20;
+		genBlock = Blocks.grass;
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.3 && data.temperature < 0.7f && data.temperature > 0.3f;
+	}
 	
 	@Override
 	public void generate() {

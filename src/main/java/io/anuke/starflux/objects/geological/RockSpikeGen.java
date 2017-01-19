@@ -1,12 +1,17 @@
 package io.anuke.starflux.objects.geological;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.util.Trig;
 import net.minecraft.init.Blocks;
 
 public class RockSpikeGen extends ObjectGenerator{
 	
 	{chance = 30;}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.03 && data.temperature > 0.6f;
+	}
 
 	@Override
 	public void generate() {

@@ -1,11 +1,21 @@
 package io.anuke.starflux.objects.plants;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import net.minecraft.init.Blocks;
 
 public class ClumpTreeGen extends ObjectGenerator{
 	public float baserad = 1f;
 	public float srad = 0.3f;
+	
+	{
+		chance = 50;
+		genBlock = Blocks.grass;
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.1 && data.temperature < 0.7f && data.temperature > 0.3f;
+	}
 
 	@Override
 	public void generate() {

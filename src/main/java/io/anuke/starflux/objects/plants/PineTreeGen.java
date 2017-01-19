@@ -1,10 +1,20 @@
 package io.anuke.starflux.objects.plants;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import net.minecraft.init.Blocks;
 
 public class PineTreeGen extends ObjectGenerator {
 	public boolean snow;
+	
+	{
+		chance = 40;
+		genBlock = Blocks.grass;
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.1 && data.temperature < 0.5f && data.temperature > 0.2f;
+	}
 
 	@Override
 	public void generate() {

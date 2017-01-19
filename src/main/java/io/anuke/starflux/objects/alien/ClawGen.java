@@ -1,12 +1,18 @@
 package io.anuke.starflux.objects.alien;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.util.Trig;
 import net.minecraft.init.Blocks;
 
 public class ClawGen extends ObjectGenerator {
 	{
 		chance = 50;
+		genBlock = Blocks.mycelium;
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.08 && data.temperature < 0.8f && data.temperature > 0.4f;
 	}
 
 	@Override

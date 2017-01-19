@@ -1,13 +1,18 @@
 package io.anuke.starflux.objects.geological;
 
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.util.Trig;
 import net.minecraft.init.Blocks;
 
 public class BoulderGen extends ObjectGenerator{
 	
 	public BoulderGen(){
-		super(20);
+		super(10);
+	}
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.3;
 	}
 
 	@Override

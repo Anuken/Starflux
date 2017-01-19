@@ -2,9 +2,14 @@ package io.anuke.starflux.objects.geological;
 
 import io.anuke.starflux.noise.Noise;
 import io.anuke.starflux.objects.ObjectGenerator;
+import io.anuke.starflux.planets.PlanetData;
 import net.minecraft.init.Blocks;
 
 public class LargeBoulderGen extends ObjectGenerator{
+	
+	public boolean add(PlanetData data){
+		return Math.random() < 0.3 && data.temperature > 0.2f;
+	}
 	
 	@Override
 	public void generate(){
