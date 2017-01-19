@@ -4,13 +4,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import cofh.thermalfoundation.block.TFBlocks;
 import cpw.mods.fml.common.Loader;
 import io.anuke.starflux.objects.ObjectGenerator;
 import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
-import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
+import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Vec3;
@@ -26,7 +28,7 @@ public class PlanetData{
 	public int id; // DONE
 	public float temperature; // DONE
 	public float pressure; // DONE
-	public float hillyness; // DONE
+	public float hillyness, spikyness; // DONE
 	public float worldScale; // DONE
 	public float gravity; // DONE
 	public float meteorFrequency; // DONE
@@ -52,30 +54,12 @@ public class PlanetData{
 	public Block[][] blocks;
 
 	public static Block[] coreBlocks;
-	
-	public static Block[] tempBlocks = 
-		{
-			Blocks.packed_ice, Blocks.snow, Blocks.stone, 
-			MarsBlocks.rock, Blocks.clay, 
-			Blocks.hardened_clay, Blocks.stained_hardened_clay, 
-			Blocks.netherrack, Blocks.soul_sand
-		};
-	
-	public static Block[] heightBlocks = 
-		{
-			Blocks.grass, Blocks.stone, 
-			Blocks.mossy_cobblestone, Blocks.cobblestone, 
-			Blocks.mycelium, Blocks.dirt,
-			Blocks.clay, Blocks.ice,
-			Blocks.stone, Blocks.snow
-		};
-	
-	public static Block[] stoneBlocks = 
-		{
-			Blocks.stone, MarsBlocks.marsBlock, 
-			Blocks.packed_ice, Blocks.hardened_clay, 
-			Blocks.packed_ice, Blocks.obsidian
-		};
+
+	public static Block[] tempBlocks = { Blocks.packed_ice, Blocks.snow, Blocks.stone, GCBlocks.blockMoon, Blocks.clay, Blocks.hardened_clay, Blocks.stained_hardened_clay, Blocks.netherrack, Blocks.soul_sand };
+
+	public static Block[] heightBlocks = { Blocks.grass, Blocks.stone, Blocks.mossy_cobblestone, Blocks.cobblestone, Blocks.mycelium, Blocks.dirt, Blocks.clay, Blocks.ice, Blocks.stone, Blocks.snow };
+
+	public static Block[] stoneBlocks = { Blocks.stone, TinkerSmeltery.blood, Blocks.packed_ice, Blocks.hardened_clay, Blocks.packed_ice, Blocks.obsidian };
 
 	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "rn", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "nk", "ji", "pod", "ch", "mre", "ite", "rs" };
 
@@ -88,25 +72,29 @@ public class PlanetData{
 	}
 
 	public static enum Mineral{
-		iron(Blocks.redstone_ore), lead(TFBlocks.blockOre), diamond(Blocks.diamond_ore), 
-		copper(TFBlocks.blockOre), tin(TFBlocks.blockOre), aluminum(TFBlocks.blockOre), gold(Blocks.gold_ore), redstone(Blocks.redstone_ore), 
-		emerald(Blocks.emerald_ore), coal(Blocks.coal_ore), clay(Blocks.clay), glowstone(Blocks.glowstone),
+		iron(Blocks.redstone_ore), lead(TFBlocks.blockOre, 3), 
+		diamond(Blocks.diamond_ore), copper(TFBlocks.blockOre), 
+		tin(TFBlocks.blockOre, 1), aluminum(GCBlocks.basicBlock, 7), 
+		silver(TFBlocks.blockOre, 2), 
+		gold(Blocks.gold_ore), redstone(Blocks.redstone_ore), 
+		emerald(Blocks.emerald_ore), coal(Blocks.coal_ore), 
+		clay(Blocks.clay), glowstone(Blocks.glowstone), 
 		oil(GalacticraftCore.fluidOil.getBlock());
-		
+
 		private BlockMetaPair block;
-		
-		private Mineral(Block block){
-			this.block = new BlockMetaPair(block, (byte)0);
+
+		private Mineral(Block block) {
+			this.block = new BlockMetaPair(block, (byte) 0);
 		}
-		
-		private Mineral(Block block, int data){
-			this.block = new BlockMetaPair(block, (byte)data);
+
+		private Mineral(Block block, int data) {
+			this.block = new BlockMetaPair(block, (byte) data);
 		}
 
 		public String capitalized(){
 			return name().substring(0, 1).toUpperCase() + name().substring(1);
 		}
-		
+
 		public BlockMetaPair getBlock(){
 			return block;
 		}
@@ -129,6 +117,27 @@ public class PlanetData{
 	private PlanetData() {
 	}
 
+	public static void main(String[] args){
+		for(int ik = 0; ik < 10; ik++){
+			String name = "";
+
+			int length = range(3, 6);
+			boolean endsvowel = Math.random() < 0.5;
+			for(int i = 0; i < length; i++){
+				String next = nameChunks[range(nameChunks.length)];
+
+				while(startsVowel(next) == endsvowel){
+					next = nameChunks[range(nameChunks.length)];
+				}
+
+				name += next;
+				endsvowel = endsVowel(next);
+			}
+
+			System.out.println(name);
+		}
+	}
+
 	public static PlanetData createPlanetData(int id){
 		boolean tf = Loader.isModLoaded("ThermalFoundation");
 		boolean tc = Loader.isModLoaded("TConstruct");
@@ -138,9 +147,16 @@ public class PlanetData{
 		data.name = "";
 
 		int length = range(2, 5);
+		boolean endsvowel = Math.random() < 0.5;
 		for(int i = 0; i < length; i++){
-			String s = nameChunks[range(nameChunks.length)];
-			data.name += s;
+			String next = nameChunks[range(nameChunks.length)];
+
+			while(startsVowel(next) == endsvowel){
+				next = nameChunks[range(nameChunks.length)];
+			}
+
+			data.name += next;
+			endsvowel = endsVowel(next);
 		}
 
 		data.name = data.name.substring(0, 1).toUpperCase() + data.name.substring(1);
@@ -149,10 +165,11 @@ public class PlanetData{
 
 		data.temperature = range(0f, 1f);
 		data.hillyness = range(0f, 1f);
+		data.spikyness = range(-0.07f, 0.07f);
 		data.worldScale = range(0.2f, 0.9f);
 		data.gravity = 0.04f + range(-0.03f, 0.03f);
 
-		data.stoneBlock = new BlockMetaPair(stoneBlocks[range(stoneBlocks.length)], (byte)0);
+		data.stoneBlock = new BlockMetaPair(stoneBlocks[range(stoneBlocks.length)], (byte) 0);
 
 		data.gases = new ArrayList<IAtmosphericGas>();
 
@@ -172,7 +189,7 @@ public class PlanetData{
 				range(0f, 1f), // TODO make green vary as well, maybe with
 				// foliage or toxicity?
 				range((1f - data.temperature) / 2f, 1f)); // colder planet,
-													// bluer sky
+		// bluer sky
 
 		// very similar, for now...
 		data.fogColor = data.skyColor.addVector(range(-0.1f, 0.1f), range(-0.1f, 0.1f), range(-0.1f, 0.1f));
@@ -189,7 +206,7 @@ public class PlanetData{
 		float add = data.pressure / 8f;
 		for(Mineral m : Mineral.values()){
 			if(m != Mineral.diamond)
-				data.minerals.add(new MineralDeposit(m, (range(5) == 0 ? range(0f, 0.1f) : add + (range(4) == 0 ? range(0.3f, 1f) : range(0, 0.6f)))));
+				data.minerals.add(new MineralDeposit(m, (range(3) == 0 ? range(0f, 0.1f) : add + (range(4) == 0 ? range(0.3f, 1f) : range(0, 0.6f)))));
 		}
 
 		if(data.temperature <= 0.5 && range(3) == 0){
@@ -254,7 +271,7 @@ public class PlanetData{
 		if(data.coreType == CoreType.molten){
 			// TODO remove this
 			data.coreBlock = Blocks.netherrack;
-			data.coreLiquid = TFBlocks.blockFluidPyrotheum;
+			coreLiquid = TFBlocks.blockFluidPyrotheum;
 			if(data.temperature > 0.7f){
 
 				// try to use a molten metal liquid, if possible
@@ -281,7 +298,9 @@ public class PlanetData{
 			data.coreBlock = data.stoneBlock.getBlock();
 			coreLiquid = Blocks.water;
 		}
-
+		
+		data.coreBlock = stoneBlocks[range(stoneBlocks.length)];
+		
 		data.coreLiquid = coreLiquid;
 
 		// data.plantType = (data.temperature < 0.12f || data.temperature >
@@ -301,11 +320,27 @@ public class PlanetData{
 		if(range(6) == 0)
 			data.waterLevel = range(90, 140);
 
-		data.blocks = new Block[6][6];
-		
+		int bsize = 6;
+
+		data.blocks = new Block[bsize][bsize];
+
+		for(int x = 0; x < bsize; x++){
+			for(int y = 0; y < bsize; y++){
+				data.blocks[x][y] = x < y ? tempBlocks[clamp((float) x / bsize * tempBlocks.length / 2 + data.temperature * tempBlocks.length / 2 + MathUtils.random(-2, 2), 0, tempBlocks.length - 1)] : heightBlocks[clamp((float) y / bsize * heightBlocks.length / 2 + data.hillyness * heightBlocks.length / 2 + MathUtils.random(-2, 2), 0, heightBlocks.length - 1)];
+			}
+		}
+
 		System.out.println("Generated planet data: \n" + data.toString());
 
 		return data;
+	}
+
+	static int clamp(float a, int b, int c){
+		if(a < b)
+			return b;
+		if(a > c)
+			return b;
+		return (int) a;
 	}
 
 	public boolean hasAtmosphere(){
@@ -327,6 +362,14 @@ public class PlanetData{
 			e.printStackTrace();
 			return "Illegal Access Exception!";
 		}
+	}
+
+	static boolean startsVowel(String s){
+		return "auioye".indexOf(s.charAt(0)) != -1;
+	}
+
+	static boolean endsVowel(String s){
+		return "auioye".indexOf(s.charAt(s.length() - 1)) != -1;
 	}
 
 	static float range(float a, float b){

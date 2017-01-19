@@ -17,7 +17,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 
 public class ProceduralChunkProvider extends ChunkProviderAdapter {
-	float scale = 0.3f;
 	int lava = 7;
 	int bedrock = 1;
 	int lavacave = 18;
@@ -56,7 +55,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 				int nz = wz + 99999;
 
 				float elevation = getElevation(wx, wz);
-				//double elevationmaterial = (Noise.nnoise(wx, wz, 60, 0.125f / 2));
+				double elevationmaterial = (Noise.nnoise(wx, wz, 60, 0.125f / 2))+elevation;
 				double temp = getTemperature(wx, wz);
 				double height = terrainHeight(elevation);
 				double lavacaveheight = lavacave + Noise.nnoise(nx, nz, 70, 8f) + Noise.nnoise(nx, nz, 10, 8f)
@@ -66,20 +65,21 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 				double bedrockheight = bedrock + Noise.nnoise(wx, nz, 30, 2f) + Noise.nnoise(wx, nz, 10, 2f);
 
 				for (int y = 0; y < Math.max(height, data.waterLevel); y++) {
-					Block block = Blocks.stone;
+					Block block = data.stoneBlock.getBlock();
 
 					// top block
 					if (y + 1 >= height) {
-						block = data.blocks[(int)((height)*data.blocks.length)][(int)(temp*data.blocks[0].length)];
+						block = data.blocks[(int)((elevationmaterial)*(data.blocks.length-1))][(int)(temp*(data.blocks[0].length-1))];
 					}
 
 					if (y >= height)
 						block = data.surfaceLiquid;
 					
+					float cscl = data.caveSize-0.5f;
 					if (data.hasCaves && cave.getValue(wx, y, wz, 0.009f) / 2.3f + cave2.getValue(wx, y, wz, 0.01f) / 3.3f
-							+ Noise.normalNoise(wx, y, wz, 50f, 0.7f) + Noise.normalNoise(wx, y, wz, 25f, 0.25f)
-							+ Noise.normalNoise(wx, y, wz, 11f, 0.25f)
-							+ Noise.normalNoise(wx, y, wz, 8f, 0.15f) >= 0.78f && block != data.surfaceLiquid)
+							+ Noise.normalNoise(wx, y, wz, 50f, 0.7f+cscl/3f) + Noise.normalNoise(wx, y, wz, 25f, 0.25f+cscl/3f)
+							+ Noise.normalNoise(wx, y, wz, 11f, 0.25f+cscl/3f)
+							+ Noise.normalNoise(wx, y, wz, 8f, 0.15f+cscl/3f) >= 0.78f && block != data.surfaceLiquid)
 						block = Blocks.air;
 
 					if (y < lavacaveheight)
@@ -122,7 +122,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	}
 
 	float terrainHeight(float elevation) {
-		return 30 + elevation * 160;
+		return 20 + elevation * (80+data.hillyness*100);
 	}
 
 	void genTopBlock(int x, int y, int z) {
@@ -140,27 +140,29 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 			for (int z = 0; z < 16; z++) {
 				int wx = chunkx * 16 + x, wz = chunkz * 16 + z;
 				float height = terrainHeight(getElevation(wx, wz));
-				float temp = getTemperature(wx, wz);
+				//float temp = getTemperature(wx, wz);
 				for (int y = 0; y < height; y++) {
 					Block above = ids[getIndex(x, y + 1, z)];
 					Block block = ids[getIndex(x, y, z)];
 					// Block below = ids[getIndex(x, y-1, z)];
 
 					if (rand.nextInt(12) == 0)
-						if (Blocks.air == block && Blocks.stone == above) {
+						if (Blocks.air == block && data.stoneBlock.getBlock() == above) {
 							int len = this.rand.nextInt(4) + 1;
 							for (int i = 0; i < len && y - i > 0; i++) {
-								setWriteBlock(x, y - i, z, Blocks.stone);
+								setWriteBlock(x, y - i, z, data.stoneBlock.getBlock());
 							}
 						}
-
-					if (above == Blocks.air && block == Blocks.stone) {
+					
+					/*
+					if (above == Blocks.air && block == data.stoneBlock.getBlock()) {
 						if (temp > 0.7f) {
 							setWriteBlock(x, y, z, Blocks.netherrack);
 						} else if (temp < 0.35f && y > lavacave) {
 							setWriteBlock(x, y, z, Blocks.packed_ice);
 						}
 					}
+					*/
 				}
 
 			}
@@ -205,18 +207,18 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 		y += 999999;
 
 		double elevation = 0.4f;
-		float octave = 1200f * scale;
+		float octave = 1200f * data.worldScale;
 
 		elevation += (Noise.nnoise(x, y, octave, 1f));
 		elevation += (Noise.nnoise(x, y, octave / 2, 0.5f));
 		elevation += (Noise.nnoise(x, y, octave / 4, 0.25f));
 		elevation += (Noise.nnoise(x, y, octave / 8, 0.125f));
 		elevation += (Noise.nnoise(x, y, octave / 16, 0.125f / 2));
-		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4));
-		elevation += (Noise.nnoise(x, y, octave / 128, 0.125f / 16));
+		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4+data.spikyness*2));
+		elevation += (Noise.nnoise(x, y, octave / 128, 0.125f / 16+data.spikyness*3));
 		// elevation += (Noise.nnoise(x, y, octave / 128, 0.125f));
 		elevation += (ridges.getValue(x, y, 0, 0.006f) + 0.5f) / 20f;
-		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4));
+		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4+data.spikyness*6));
 
 		elevation /= 0.84;
 
