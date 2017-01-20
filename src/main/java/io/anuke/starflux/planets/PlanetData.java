@@ -12,6 +12,7 @@ import io.anuke.starflux.objects.ObjectGenerator;
 import io.anuke.starflux.objects.alien.*;
 import io.anuke.starflux.objects.geological.*;
 import io.anuke.starflux.objects.plants.*;
+import io.anuke.starflux.objects.structures.BaseGen;
 import micdoodle8.mods.galacticraft.api.prefab.core.BlockMetaPair;
 import micdoodle8.mods.galacticraft.api.world.IAtmosphericGas;
 import micdoodle8.mods.galacticraft.core.GalacticraftCore;
@@ -31,7 +32,7 @@ public class PlanetData{
 	public int id; // DONE
 	public float temperature; // DONE
 	public float pressure; // DONE
-	public float hillyness, spikyness; // DONE
+	public float hillyness, spikyness, ridgyness; // DONE
 	public float worldScale; // DONE
 	public float gravity; // DONE
 	public float meteorFrequency; // DONE
@@ -67,9 +68,9 @@ public class PlanetData{
 
 	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "ri", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "ner", "ji", "pod", "ch", "mer", "ite", "rs" };
 
-	static Class<?>[] objectClasses = { SpikeGen.class, BushGen.class, ClumpTreeGen.class, GrassPatchGen.class, PineTreeGen.class, TreeGen.class, BoulderGen.class, LargeBoulderGen.class, RockGen.class, RockSpikeGen.class, SpikeGen.class, ClawGen.class, CupFlowerGen.class, GrassTentacleGen.class, OrbFlowerGen.class, StarFlowerGen.class, TentacleGen.class, VineGen.class };
+	static Class<?>[] objectClasses = {BaseGen.class, SpikeGen.class, BushGen.class, ClumpTreeGen.class, GrassPatchGen.class, PineTreeGen.class, TreeGen.class, BoulderGen.class, LargeBoulderGen.class, RockGen.class, RockSpikeGen.class, SpikeGen.class, ClawGen.class, CupFlowerGen.class, GrassTentacleGen.class, OrbFlowerGen.class, StarFlowerGen.class, TentacleGen.class, VineGen.class };
 
-	static enum CoreType{
+	public static enum CoreType{
 		molten, frozen, water, none
 	}
 
@@ -164,7 +165,8 @@ public class PlanetData{
 
 		data.temperature = range(0f, 1f);
 		data.hillyness = range(0f, 1f);
-		data.spikyness = range(-0.07f, 0.07f);
+		data.spikyness = range(-0.05f, 0.05f);
+		data.ridgyness = range(0, 3) == 0 ? range(0, 1) : 0;
 		data.worldScale = range(0.2f, 0.9f);
 		data.gravity = 0.04f + range(-0.03f, 0.03f);
 
@@ -346,7 +348,7 @@ public class PlanetData{
 			try{
 				for(int i = 0; i < range(1, 2); i++){
 					ObjectGenerator gen = (ObjectGenerator) c.newInstance();
-					if(gen.add(data)){
+					if(gen.add(data) || gen.add(data) || gen.add(data)){
 						gen.setup(data);
 						data.objects.add(gen);
 					}

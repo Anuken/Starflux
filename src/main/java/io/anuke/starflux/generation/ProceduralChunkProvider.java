@@ -7,6 +7,7 @@ import java.util.Random;
 import io.anuke.starflux.noise.Noise;
 import io.anuke.starflux.noise.RidgedPerlin;
 import io.anuke.starflux.planets.PlanetData;
+import io.anuke.starflux.planets.PlanetData.CoreType;
 import io.anuke.starflux.util.ChunkProviderAdapter;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.BiomeDecoratorSpace;
 import micdoodle8.mods.galacticraft.api.prefab.world.gen.MapGenBaseMeta;
@@ -58,7 +59,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 				double elevationmaterial = (Noise.nnoise(wx, wz, 30, 0.125f))+elevation;
 				double temp = getTemperature(wx, wz);
 				double height = terrainHeight(elevation);
-				double lavacaveheight = lavacave + Noise.nnoise(nx, nz, 70, 8f) + Noise.nnoise(nx, nz, 10, 8f)
+				double lavacaveheight = data.coreType == CoreType.none ? 0 : lavacave + Noise.nnoise(nx, nz, 70, 8f) + Noise.nnoise(nx, nz, 10, 8f)
 						+ Noise.nnoise(nx, nz, 30, 8f) + Noise.nnoise(nx, wz, 5, 6f);
 				double lavafloorheight = bedrock + 2 + Noise.nnoise(nx, nz, 20, 20f) + Noise.nnoise(nx, nz, 10, 18f)
 						+ Noise.nnoise(nx, nz, 3, 12f) + Noise.nnoise(nx, nz, 7, 27f);
@@ -222,7 +223,7 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4+data.spikyness*2));
 		elevation += (Noise.nnoise(x, y, octave / 128, 0.125f / 16+data.spikyness*3));
 		// elevation += (Noise.nnoise(x, y, octave / 128, 0.125f));
-		elevation += (ridges.getValue(x, y, 0, 0.006f) + 0.5f) / 20f;
+		elevation += (ridges.getValue(x, y, 0, 0.006f) + 0.5f) / 20*(1f-data.ridgyness);
 		elevation += (Noise.nnoise(x, y, octave / 32, 0.125f / 4+data.spikyness*6));
 
 		elevation /= 0.84;

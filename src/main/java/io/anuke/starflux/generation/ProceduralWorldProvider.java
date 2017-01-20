@@ -186,7 +186,6 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
     public float getStarBrightness(float par1){
 		return 1f;
 	}
-    
 	
 	@Override
 	public float getCloudHeight(){
@@ -195,6 +194,6 @@ public class ProceduralWorldProvider extends WorldProviderSpace implements IExit
 	
 	@Override
     public IRenderHandler getCloudRenderer(){
-        return planet.data.hasClouds ? new CloudRenderer() : new DefaultCloudRenderer();
+        return planet.data.hasClouds ? new DefaultCloudRenderer() : new CloudRenderer();
     }
 }
