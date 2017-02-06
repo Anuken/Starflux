@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.math.MathUtils;
-
 import cofh.thermalfoundation.block.TFBlocks;
 import cpw.mods.fml.common.Loader;
 import io.anuke.starflux.objects.ObjectGenerator;
@@ -64,7 +62,7 @@ public class PlanetData{
 
 	public static Block[] heightBlocks = { Blocks.grass, Blocks.stone, Blocks.gravel, Blocks.mossy_cobblestone, Blocks.cobblestone, Blocks.grass, Blocks.mycelium, Blocks.clay, Blocks.ice, Blocks.stone, Blocks.snow };
 
-	public static Block[] stoneBlocks = { Blocks.stone, Blocks.soul_sand, Blocks.packed_ice, Blocks.hardened_clay, Blocks.packed_ice, Blocks.obsidian };
+	public static Block[] stoneBlocks = { Blocks.stone };
 
 	static String[] nameChunks = { "fi", "nl", "it", "num", "kez", "ga", "mu", "na", "inp", "ri", "or", "hy", "pl", "buv", "im", "we", "zu", "ut", "rev", "uf", "og", "wo", "ol", "kn", "zu", "tre", "ner", "ji", "pod", "ch", "mer", "ite", "rs" };
 
@@ -122,7 +120,7 @@ public class PlanetData{
 			String name = "";
 
 			int length = range(2, 5);
-			boolean endsvowel = Math.random() < 0.5;
+			boolean endsvowel = rand.nextFloat() < 0.5;
 			for(int i = 0; i < length; i++){
 				String next = nameChunks[range(nameChunks.length)];
 
@@ -137,6 +135,10 @@ public class PlanetData{
 			System.out.println(name);
 		}
 	}
+	
+	public static void setSeed(long seed){
+		rand.setSeed(seed);
+	}
 
 	public static PlanetData createPlanetData(int id){
 		boolean tf = Loader.isModLoaded("ThermalFoundation");
@@ -147,7 +149,7 @@ public class PlanetData{
 		data.name = "";
 
 		int length = range(2, 5);
-		boolean endsvowel = Math.random() < 0.5;
+		boolean endsvowel = rand.nextFloat() < 0.5;
 		for(int i = 0; i < length; i++){
 			String next = nameChunks[range(nameChunks.length)];
 
@@ -265,7 +267,7 @@ public class PlanetData{
 			}
 		}else if(data.temperature < 0.2f){ // low temperature
 			if(tf){
-				surfaceLiquid = Math.random() < 0.5 ? TFBlocks.blockFluidCryotheum : TFBlocks.blockFluidPetrotheum;
+				surfaceLiquid = rand.nextFloat() < 0.5 ? TFBlocks.blockFluidCryotheum : TFBlocks.blockFluidPetrotheum;
 			}else{
 				surfaceLiquid = Blocks.ice;
 			}
@@ -320,7 +322,7 @@ public class PlanetData{
 
 		data.hasSnow = data.temperature < 0.3f && range(3) != 0; // snow only in low temperatures
 
-		data.hasCaves = data.pressure < 0.8 && range(8) != 0; // very high pressure planets don't have caves, and 1 in 8don't have them either
+		data.hasCaves  = true;//= data.pressure < 0.8 && range(8) != 0; // very high pressure planets don't have caves, and 1 in 8don't have them either
 
 		data.caveSize = range(0f, 1f);
 
@@ -336,7 +338,7 @@ public class PlanetData{
 
 		for(int x = 0; x < bsize; x++){
 			for(int y = 0; y < bsize; y++){
-				data.blocks[x][y] = x < y ? tempBlocks[clamp((float) x / bsize * tempBlocks.length / 2 + data.temperature * tempBlocks.length / 2 + MathUtils.random(-2, 2), 0, tempBlocks.length - 1)] : heightBlocks[clamp((float) y / bsize * heightBlocks.length / 2 + data.hillyness * heightBlocks.length / 2 + MathUtils.random(-2, 2), 0, heightBlocks.length - 1)];
+				data.blocks[x][y] = x < y ? tempBlocks[clamp((float) x / bsize * tempBlocks.length / 2 + data.temperature * tempBlocks.length / 2 + range(-2, 2), 0, tempBlocks.length - 1)] : heightBlocks[clamp((float) y / bsize * heightBlocks.length / 2 + data.hillyness * heightBlocks.length / 2 + range(-2, 2), 0, heightBlocks.length - 1)];
 				if(!data.gases.contains(IAtmosphericGas.OXYGEN) && (data.blocks[x][y] == Blocks.grass || data.blocks[x][y] == Blocks.mycelium))
 					data.blocks[x][y] = stoneBlocks[range(stoneBlocks.length)];
 			}
@@ -348,10 +350,10 @@ public class PlanetData{
 			try{
 				for(int i = 0; i < range(1, 2); i++){
 					ObjectGenerator gen = (ObjectGenerator) c.newInstance();
-					if(gen.add(data) || gen.add(data) || gen.add(data)){
+					//if(gen.add(data) || gen.add(data) || gen.add(data)){
 						gen.setup(data);
 						data.objects.add(gen);
-					}
+					//}
 				}
 			}catch(Exception e){
 

@@ -13,7 +13,7 @@ public class StarFlowerGen extends ObjectGenerator{
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.3 && data.temperature < 0.8f && data.temperature > 0.4f;
+		return chance(0.3) && data.temperature < 0.8f && data.temperature > 0.4f;
 	}
 	
 	@Override

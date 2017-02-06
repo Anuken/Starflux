@@ -12,7 +12,7 @@ public class GrassTentacleGen extends ObjectGenerator {
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.15 && data.temperature < 0.8f && data.temperature > 0.4f;
+		return chance(0.15) && data.temperature < 0.8f && data.temperature > 0.4f;
 	}
 
 	@Override

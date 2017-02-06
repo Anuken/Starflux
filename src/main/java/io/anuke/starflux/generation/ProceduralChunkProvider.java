@@ -21,9 +21,9 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 	int lava = 7;
 	int bedrock = 1;
 	int lavacave = 18;
-	RidgedPerlin ridges = new RidgedPerlin(2, 1, 0.4f);
-	RidgedPerlin cave = new RidgedPerlin(3, 2, 0.4f);
-	RidgedPerlin cave2 = new RidgedPerlin(4, 1, 0.4f);
+	RidgedPerlin ridges = new RidgedPerlin(3, 1, 0.4f);
+	RidgedPerlin cave = new RidgedPerlin(4, 2, 0.4f);
+	RidgedPerlin cave2 = new RidgedPerlin(5, 1, 0.4f);
 	BiomeDecoratorSpace decorator;
 	List<MapGenBaseMeta> generators = new ArrayList<MapGenBaseMeta>();
 	SpawnListEntry[] creatures = {};
@@ -58,7 +58,11 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 				float elevation = getElevation(wx, wz);
 				double elevationmaterial = (Noise.nnoise(wx, wz, 30, 0.125f))+elevation;
 				double temp = getTemperature(wx, wz);
-				double height = terrainHeight(elevation);
+				double height =  150
+						+ Noise.normalNoise(wx, wz, 60, 40) 
+						+ Noise.normalNoise(wx, wz, 10, 5) 
+						+ Noise.normalNoise(wx, wz, 5, 4) 
+						+ ridges.getValue(wx, wz, 0.005f)*45;
 				double lavacaveheight = data.coreType == CoreType.none ? 0 : lavacave + Noise.nnoise(nx, nz, 70, 8f) + Noise.nnoise(nx, nz, 10, 8f)
 						+ Noise.nnoise(nx, nz, 30, 8f) + Noise.nnoise(nx, wz, 5, 6f);
 				double lavafloorheight = bedrock + 2 + Noise.nnoise(nx, nz, 20, 20f) + Noise.nnoise(nx, nz, 10, 18f)
@@ -79,11 +83,11 @@ public class ProceduralChunkProvider extends ChunkProviderAdapter {
 					if (y >= height)
 						block = data.surfaceLiquid;
 					
-					float cscl = data.caveSize-0.5f;
-					if (data.hasCaves && cave.getValue(wx, y, wz, 0.009f) / 2.3f + cave2.getValue(wx, y, wz, 0.01f) / 3.3f
-							+ Noise.normalNoise(wx, y, wz, 50f, 0.7f+cscl/3f) + Noise.normalNoise(wx, y, wz, 25f, 0.25f+cscl/3f)
-							+ Noise.normalNoise(wx, y, wz, 11f, 0.25f+cscl/3f)
-							+ Noise.normalNoise(wx, y, wz, 8f, 0.15f+cscl/3f) >= 0.78f && block != data.surfaceLiquid)
+					//float cscl = data.caveSize-0.5f;
+					if (data.hasCaves && cave.getValue(wx, y, wz, 0.003f) / 1.1f + cave2.getValue(wx, y, wz, 0.006f) / 2.2f
+							+ Noise.normalNoise(wx, y, wz, 60f, 0.6f) + Noise.normalNoise(wx, y, wz, 25f, 0.2f)
+							+ Noise.normalNoise(wx, y, wz, 11f, 0.2f)
+							 >= 1.3f && block != data.surfaceLiquid)
 						block = Blocks.air;
 
 					if (y < lavacaveheight)

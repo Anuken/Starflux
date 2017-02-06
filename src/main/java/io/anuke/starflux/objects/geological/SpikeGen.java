@@ -12,7 +12,7 @@ public class SpikeGen extends ObjectGenerator{
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.09 && data.temperature < 0.6f;
+		return chance(0.09) && data.temperature < 0.6f;
 	}
 
 	Block blocka, blockb;

@@ -13,7 +13,7 @@ public class GrassPatchGen extends ObjectGenerator{
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.4 && data.temperature < 0.7f && data.temperature > 0.3f;
+		return chance(0.4) && data.temperature < 0.7f && data.temperature > 0.3f;
 	}
 	
 	@Override

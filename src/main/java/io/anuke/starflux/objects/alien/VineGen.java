@@ -12,7 +12,7 @@ public class VineGen extends ObjectGenerator {
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.2 && data.temperature < 0.8f && data.temperature > 0.4f;
+		return chance(0.2) && data.temperature < 0.8f && data.temperature > 0.4f;
 	}
 	
 	boolean stars = true;

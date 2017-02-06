@@ -31,13 +31,15 @@ public class Starflux{
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
+    	PlanetData.setSeed(0);
+    	
     	for(int i = 0; i < 10; i ++)
     	createNewPlanet();
     }
     
     public void createNewPlanet(){
     	int id = lastID ++;
-    	
+ 
     	PlanetData data = PlanetData.createPlanetData(id);
     	
     	ProceduralPlanet planet = (ProceduralPlanet) new ProceduralPlanet(data, data.name).setParentSolarSystem(GalacticraftCore.solarSystemSol).setRelativeSize(1F).setRelativeDistanceFromCenter(new CelestialBody.ScalableDistance(1F+planets.size()/2f, 1F+planets.size()/2f));

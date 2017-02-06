@@ -163,6 +163,10 @@ public abstract class ObjectGenerator extends WorldGenAbstractTree {
 		return rand.nextBoolean() ? -1 : 1;
 	}
 	
+	public boolean chance(double c){
+		return rand.nextFloat() < c;
+	}
+	
 	public float sclamp(float f) {
 		if (f < -1f)
 			return -1f;

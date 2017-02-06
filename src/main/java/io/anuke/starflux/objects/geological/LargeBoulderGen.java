@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 public class LargeBoulderGen extends ObjectGenerator{
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.3 && data.temperature > 0.2f;
+		return chance(0.3) && data.temperature > 0.2f;
 	}
 	
 	@Override

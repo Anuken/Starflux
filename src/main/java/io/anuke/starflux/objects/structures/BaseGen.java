@@ -10,9 +10,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 
 public class BaseGen extends ObjectGenerator{
+	
+	{chance = 500;}
 
 	public boolean add(PlanetData data){
-		return true;
+		return rand.nextInt(6) == 0;
 	}
 
 	@Override

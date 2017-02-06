@@ -13,7 +13,7 @@ public class OrbFlowerGen extends ObjectGenerator {
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.1 && data.temperature < 0.7f && data.temperature > 0.4f;
+		return chance(0.1) && data.temperature < 0.7f && data.temperature > 0.4f;
 	}
 
 	@Override

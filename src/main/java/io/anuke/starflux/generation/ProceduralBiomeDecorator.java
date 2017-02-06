@@ -2,7 +2,6 @@ package io.anuke.starflux.generation;
 
 import io.anuke.starflux.planets.PlanetData;
 import io.anuke.starflux.planets.PlanetData.MineralDeposit;
-import io.anuke.starflux.util.BasicDecorator;
 
 public class ProceduralBiomeDecorator extends BasicDecorator{
 	final PlanetData data;

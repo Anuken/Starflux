@@ -12,7 +12,7 @@ public class BoulderGen extends ObjectGenerator{
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.3;
+		return chance(0.33);
 	}
 
 	@Override

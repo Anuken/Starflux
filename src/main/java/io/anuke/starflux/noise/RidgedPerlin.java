@@ -24,6 +24,10 @@ public class RidgedPerlin{
 			frequency *= lacunarity;
 		}
 	}
+	
+	public float getValue(int x, int y, float frequency){
+		return getValue(x, y, 0, frequency);
+	}
 
 	public float getValue(int x, int y, int z, float frequency){
 

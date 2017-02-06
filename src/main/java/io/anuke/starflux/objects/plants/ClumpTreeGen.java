@@ -14,7 +14,7 @@ public class ClumpTreeGen extends ObjectGenerator{
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.24 && data.temperature < 0.7f && data.temperature > 0.3f;
+		return chance(0.24) && data.temperature < 0.7f && data.temperature > 0.3f;
 	}
 
 	@Override

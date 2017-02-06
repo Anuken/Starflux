@@ -13,7 +13,7 @@ public class PineTreeGen extends ObjectGenerator {
 	}
 	
 	public boolean add(PlanetData data){
-		return Math.random() < 0.1 && data.temperature < 0.5f && data.temperature > 0.1f;
+		return chance(0.1) && data.temperature < 0.5f && data.temperature > 0.1f;
 	}
 
 	@Override

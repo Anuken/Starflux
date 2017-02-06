@@ -1,4 +1,4 @@
-package io.anuke.starflux.util;
+package io.anuke.starflux.generation;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -49,8 +49,8 @@ public abstract class BasicDecorator extends BiomeDecoratorSpace {
 
 	@Override
 	protected void decorate() {
-		for (OreGenerator gen : oregenerators)
-			generateOre(gen.amount, gen.gen, gen.miny, gen.maxy);
+		//for (OreGenerator gen : oregenerators)
+		//	generateOre(gen.amount, gen.gen, gen.miny, gen.maxy);
 
 		for (ObjectGenerator gen : objectgenerators){
 			int x = this.chunkX + rand.nextInt(16);
